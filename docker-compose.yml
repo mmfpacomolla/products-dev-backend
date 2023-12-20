@@ -1,0 +1,27 @@
+version: "3.9"
+services:
+  db:
+    image: mysql:8.0.35-debian
+    container_name: products-backend-db
+    ports: 
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=1234
+      - MYSQL_USER=dbuser
+      - MYSQL_PASSWORD=dbuser
+      - MYSQL_DATABASE=products
+    volumes:
+      - ./config/mysql_dump:/docker-entrypoint-initdb.d
+      - mysql-data:/var/lib/mysql #Opcional
+  app:
+    build: .
+    container_name: products-backend-api
+    volumes:
+      - ./app:/var/www/html/app
+      - ./config/virtualhosts/products.api.dev.com:/etc/nginx/sites-enabled/products.api.dev.com
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+volumes:
+  mysql-data: #Opcional (si queremos mantener los datos de la base de datos)

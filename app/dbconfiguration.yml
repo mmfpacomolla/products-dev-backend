@@ -1,0 +1,4 @@
+ip: "db"
+dbname: "products"
+user: "dbuser"
+pass: "dbuser"
